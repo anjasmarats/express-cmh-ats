@@ -1,0 +1,39 @@
+/* Dark Mode Styles */
+body.dark-mode {
+    --text-dark: #e9ecef;
+    --text-light: #adb5bd;
+    --bg-light: #121212;
+    --white: #1e1e1e;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+body.dark-mode .navbar {
+    background-color: rgba(30, 30, 30, 0.95);
+}
+
+body.dark-mode .service-card,
+body.dark-mode .testimonial-card {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .services-section {
+    background-color: #1a1a1a;
+}
+
+body.dark-mode .testimonials-section {
+    background-color: #121212;
+}
+
+body.dark-mode .footer {
+    background-color: #0a0a0a;
+}
+
+body.dark-mode .mode-toggle .light-icon {
+    display: none;
+}
+
+body.dark-mode .mode-toggle .dark-icon {
+    display: block;
+}

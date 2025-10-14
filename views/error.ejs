@@ -1,0 +1,160 @@
+<div class="error-page">
+        <!-- Floating Elements -->
+        <div class="floating-elements">
+            <div class="floating-element">🌿</div>
+            <div class="floating-element">💫</div>
+            <div class="floating-element">🕊️</div>
+            <div class="floating-element">💖</div>
+            <div class="floating-element">🧠</div>
+            <div class="floating-element">🌱</div>
+        </div>
+        
+        <div class="container">
+            <div class="error-container">
+                <!-- Error Animation & Icon -->
+                <div class="error-animation">
+                    <span class="error-icon">🔍</span>
+                    <h1 class="error-code">404</h1>
+                    <h2 class="error-title">Halaman Tidak Ditemukan</h2>
+                </div>
+                
+                <!-- Error Message -->
+                <div class="error-message">
+                    <p>Sepertinya Anda telah tersesat dalam perjalanan healing Anda. Jangan khawatir, terkadang tersesat adalah bagian dari proses menemukan jalan yang benar.</p>
+                    <p>Mari kita bantu Anda kembali ke jalur keseimbangan dan penyembuhan.</p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="error-actions">
+                    <a href="index.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home me-2"></i>Kembali ke Beranda
+                    </a>
+                    <a href="contact.html" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-comments me-2"></i>Konsultasi Gratis
+                    </a>
+                    <button onclick="history.back()" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Halaman Sebelumnya
+                    </button>
+                </div>
+                
+                <!-- Search Form -->
+                <div class="error-search">
+                    <p class="mb-3">Atau cari konten yang Anda inginkan:</p>
+                    <form class="search-form" onsubmit="handleSearch(event)">
+                        <input type="text" class="search-input" placeholder="Cari artikel, layanan, atau informasi..." id="searchInput">
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search me-2"></i>Cari
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="error-links">
+                    <div class="error-link-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>Inner Healing</h3>
+                        <p>Jelajahi layanan penyembuhan luka batin dan inner child</p>
+                        <a href="methodology.html#inner-healing">
+                            Pelajari Lebih Lanjut <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="error-link-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3>Konsultasi</h3>
+                        <p>Jadwalkan sesi konsultasi gratis dengan Coach Inne</p>
+                        <a href="contact.html">
+                            Hubungi Sekarang <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="error-link-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Blog & Artikel</h3>
+                        <p>Temukan artikel inspiratif tentang kesehatan mental</p>
+                        <a href="blog.html">
+                            Baca Artikel <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="error-link-card">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Tentang Coach Inne</h3>
+                        <p>Pelajari lebih dalam tentang pendekatan dan metodologi</p>
+                        <a href="about.html">
+                            Kenali Lebih Dekat <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Handle search functionality
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            
+            if (searchTerm) {
+                // Simulate search - in a real implementation, this would redirect to search results
+                alert(`Pencarian untuk: "${searchTerm}"\n\nDalam implementasi lengkap, ini akan mengarahkan ke halaman hasil pencarian.`);
+                // window.location.href = `search.html?q=${encodeURIComponent(searchTerm)}`;
+            } else {
+                alert('Silakan masukkan kata kunci pencarian.');
+            }
+        }
+        
+        // Add interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add typing effect to error message
+            const errorMessage = document.querySelector('.error-message p');
+            if (errorMessage) {
+                const originalText = errorMessage.textContent;
+                errorMessage.textContent = '';
+                
+                let i = 0;
+                const typeWriter = () => {
+                    if (i < originalText.length) {
+                        errorMessage.textContent += originalText.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 30);
+                    }
+                };
+                
+                // Start typing effect after a short delay
+                setTimeout(typeWriter, 1000);
+            }
+            
+            // Add pulse animation to action buttons
+            const actionButtons = document.querySelectorAll('.error-actions .btn');
+            actionButtons.forEach((button, index) => {
+                button.style.animationDelay = `${index * 0.2}s`;
+                button.classList.add('animate__animated', 'animate__pulse');
+            });
+            
+            // Add hover effects to link cards
+            const linkCards = document.querySelectorAll('.error-link-card');
+            linkCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Auto-focus on search input
+            document.getElementById('searchInput').focus();
+        });
+        
+        // Handle dark mode based on user preference
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (!isDarkMode) {
+            document.body.classList.remove('dark-mode');
+        }
+    </script>

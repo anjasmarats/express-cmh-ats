@@ -1,0 +1,737 @@
+<div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <div class="brand-icon">🌿</div>
+                <h1>Coach Inne</h1>
+                <p>Admin Dashboard</p>
+            </div>
+            
+            <nav class="admin-nav">
+                <div class="nav-section">
+                    <h3>Menu Utama</h3>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Beranda</a></li>
+                        <li><a href="admin-articles.html"><i class="fas fa-newspaper"></i> Kelola Artikel</a></li>
+                        <li><a href="#"><i class="fas fa-images"></i> Media Library</a></li>
+                        <li><a href="#"><i class="fas fa-comments"></i> Komentar</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Pengaturan</h3>
+                    <ul class="nav-links">
+                        <li><a href="#"><i class="fas fa-user"></i> Profil</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Pengaturan Umum</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Keamanan</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Aktivitas</h3>
+                    <ul class="nav-links">
+                        <li><a href="#"><i class="fas fa-chart-bar"></i> Statistik</a></li>
+                        <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>Kelola Artikel</h2>
+                <div class="admin-actions">
+                    <button class="btn btn-outline" id="previewArticles">
+                        <i class="fas fa-eye"></i> Preview Website
+                    </button>
+                    <button class="btn btn-primary" id="newArticleBtn">
+                        <i class="fas fa-plus"></i> Artikel Baru
+                    </button>
+                </div>
+            </header>
+
+            <!-- Article Form -->
+            <section class="form-container" id="articleForm">
+                <h3 class="section-title">Tambah/Edit Artikel</h3>
+                
+                <form action="" method="post" id="articleFormData" enctype="multipart/form-data">
+                    <input type="hidden" id="articleId">
+                    
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="articleTitle" class="form-label">Judul Artikel</label>
+                            <input type="text" id="articleTitle" class="form-control" placeholder="Masukkan judul artikel yang menarik..." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="articleSlug" class="form-label">Slug URL</label>
+                            <input type="text" id="articleSlug" class="form-control" placeholder="judul-artikel-seo-friendly" required>
+                            <small class="text-muted">URL yang ramah SEO untuk artikel ini</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="articleCategory" class="form-label">Kategori</label>
+                            <select id="articleCategory" class="form-select" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="inner-healing">Inner Healing</option>
+                                <option value="trauma-release">Trauma Release</option>
+                                <option value="healthy-boundaries">Healthy Boundaries</option>
+                                <option value="body-intelligence">Body Intelligence</option>
+                                <option value="holistic-wellness">Holistic Wellness</option>
+                                <option value="self-permission">Self Permission</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="articleImage" class="form-label">URL Gambar Utama</label>
+                            <input type="text" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg">
+                            <small class="text-muted">Masukkan URL gambar yang akan digunakan sebagai thumbnail artikel</small>
+                            
+                            <div class="image-preview-container">
+                                <div class="image-preview" id="imagePreview">
+                                    <img src="" alt="Preview Gambar">
+                                </div>
+                                <div class="image-actions">
+                                    <button type="button" class="btn btn-outline btn-sm" id="clearImage">
+                                        <i class="fas fa-times"></i> Hapus Gambar
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="testImage">
+                                        <i class="fas fa-sync"></i> Test URL
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="articleContent" class="form-label">Konten Artikel</label>
+                            <textarea id="articleContent" class="form-control" rows="15" placeholder="Tulis konten artikel Anda di sini..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="articleExcerpt" class="form-label">Ringkasan Artikel</label>
+                            <textarea id="articleExcerpt" class="form-control" rows="3" placeholder="Tulis ringkasan singkat artikel (akan ditampilkan di halaman daftar artikel)" maxlength="200"></textarea>
+                            <small class="text-muted" id="excerptCounter">0/200 karakter</small>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="articleTags" class="form-label">Tag</label>
+                            <input type="text" id="articleTags" class="form-control" placeholder="healing, mental-health, self-care (pisahkan dengan koma)">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="d-flex justify-between align-center">
+                            <div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="articleFeatured" class="form-check-input">
+                                    <label for="articleFeatured" class="form-check-label">Jadikan artikel featured</label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input type="checkbox" id="articleComments" class="form-check-input" checked>
+                                    <label for="articleComments" class="form-check-label">Izinkan komentar</label>
+                                </div>
+                            </div>
+                            
+                            <div class="admin-actions">
+                                <button type="button" class="btn btn-outline" id="saveDraftBtn">
+                                    <i class="fas fa-save"></i> Simpan Draft
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="publishArticleBtn">
+                                    <i class="fas fa-paper-plane"></i> Publikasikan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Articles List -->
+            <section class="articles-container">
+                <div class="articles-header">
+                    <h3 class="section-title mb-0">Daftar Artikel</h3>
+                    <div class="d-flex align-center">
+                        <input type="text" id="searchArticles" class="form-control" placeholder="Cari artikel..." style="width: 250px; margin-right: 1rem;">
+                        <select id="filterCategory" class="form-select" style="width: 200px;">
+                            <option value="">Semua Kategori</option>
+                            <option value="inner-healing">Inner Healing</option>
+                            <option value="trauma-release">Trauma Release</option>
+                            <option value="healthy-boundaries">Healthy Boundaries</option>
+                            <option value="body-intelligence">Body Intelligence</option>
+                            <option value="holistic-wellness">Holistic Wellness</option>
+                            <option value="self-permission">Self Permission</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="articles-table">
+                        <thead>
+                            <tr>
+                                <th width="80">Gambar</th>
+                                <th>Judul Artikel</th>
+                                <th width="120">Kategori</th>
+                                <th width="120">Status</th>
+                                <th width="150">Tanggal</th>
+                                <th width="120">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articlesList">
+                            <!-- Articles will be loaded here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-3" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Memuat artikel...</p>
+                </div>
+
+                <div class="text-center mt-3" id="noArticles" style="display: none;">
+                    <p>Belum ada artikel. <a href="#" id="createFirstArticle">Buat artikel pertama Anda!</a></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Konfirmasi Hapus</h3>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus artikel "<strong id="deleteArticleTitle"></strong>"?</p>
+                <p class="text-muted">Tindakan ini tidak dapat dibatalkan.</p>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn btn-outline" id="cancelDelete">Batal</button>
+                <button class="btn btn-danger" id="confirmDelete">Hapus Artikel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Pratinjau Artikel</h3>
+                <button class="modal-close" id="closePreviewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="articlePreviewContent">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize TinyMCE Editor
+        tinymce.init({
+            selector: '#articleContent',
+            plugins: 'advlist autolink lists link image charmap preview anchor table code help wordcount',
+            toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code | help',
+            height: 400,
+            menubar: false,
+            branding: false,
+            statusbar: false,
+            content_style: `
+                body { 
+                    font-family: 'Poppins', sans-serif; 
+                    font-size: 14px; 
+                    line-height: 1.6;
+                    color: #264653;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    font-family: 'Playfair Display', serif;
+                    color: #1d7874;
+                    margin-top: 1.5rem;
+                    margin-bottom: 1rem;
+                }
+                p { margin-bottom: 1rem; }
+                img { max-width: 100%; height: auto; border-radius: 8px; }
+                blockquote {
+                    border-left: 4px solid #2a9d8f;
+                    padding-left: 1rem;
+                    margin: 1.5rem 0;
+                    font-style: italic;
+                    color: #6c757d;
+                }
+            `,
+            setup: function(editor) {
+                editor.on('change', function() {
+                    updateExcerptFromContent();
+                });
+            }
+        });
+
+        // Article Management System
+        class ArticleManager {
+            constructor() {
+                this.articles = JSON.parse(localStorage.getItem('coachInneArticles')) || [];
+                this.currentArticleId = null;
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadArticles();
+                this.setupAutoSlug();
+                this.setupImagePreview();
+            }
+
+            bindEvents() {
+                // Form submission
+                document.getElementById('articleFormData').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveArticle(true);
+                });
+
+                // Button events
+                document.getElementById('saveDraftBtn').addEventListener('click', () => this.saveArticle(false));
+                document.getElementById('newArticleBtn').addEventListener('click', () => this.newArticle());
+                document.getElementById('previewArticles').addEventListener('click', () => window.open('blog.html', '_blank'));
+                document.getElementById('createFirstArticle').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.newArticle();
+                });
+
+                // Search and filter
+                document.getElementById('searchArticles').addEventListener('input', (e) => this.filterArticles(e.target.value));
+                document.getElementById('filterCategory').addEventListener('change', (e) => this.filterArticlesByCategory(e.target.value));
+
+                // Excerpt character counter
+                document.getElementById('articleExcerpt').addEventListener('input', this.updateExcerptCounter);
+
+                // Modal events
+                document.getElementById('closeDeleteModal').addEventListener('click', () => this.hideModal('deleteModal'));
+                document.getElementById('cancelDelete').addEventListener('click', () => this.hideModal('deleteModal'));
+                document.getElementById('confirmDelete').addEventListener('click', () => this.deleteArticle());
+                document.getElementById('closePreviewModal').addEventListener('click', () => this.hideModal('previewModal'));
+
+                // Image actions
+                document.getElementById('clearImage').addEventListener('click', () => this.clearImage());
+                document.getElementById('testImage').addEventListener('click', () => this.testImageUrl());
+            }
+
+            setupAutoSlug() {
+                const titleInput = document.getElementById('articleTitle');
+                const slugInput = document.getElementById('articleSlug');
+
+                titleInput.addEventListener('input', () => {
+                    if (!this.currentArticleId) { // Only auto-generate for new articles
+                        const title = titleInput.value;
+                        const slug = this.generateSlug(title);
+                        slugInput.value = slug;
+                    }
+                });
+            }
+
+            setupImagePreview() {
+                const imageInput = document.getElementById('articleImage');
+                const preview = document.getElementById('imagePreview');
+
+                imageInput.addEventListener('input', () => {
+                    const url = imageInput.value.trim();
+                    if (url) {
+                        preview.style.display = 'block';
+                        preview.querySelector('img').src = url;
+                    } else {
+                        preview.style.display = 'none';
+                    }
+                });
+            }
+
+            generateSlug(text) {
+                return text
+                    .toLowerCase()
+                    .replace(/[^\w ]+/g, '')
+                    .replace(/ +/g, '-');
+            }
+
+            updateExcerptCounter() {
+                const excerpt = document.getElementById('articleExcerpt');
+                const counter = document.getElementById('excerptCounter');
+                const count = excerpt.value.length;
+                counter.textContent = `${count}/200 karakter`;
+                
+                if (count > 200) {
+                    counter.style.color = 'var(--danger)';
+                } else {
+                    counter.style.color = 'var(--text-light)';
+                }
+            }
+
+            updateExcerptFromContent() {
+                const excerpt = document.getElementById('articleExcerpt');
+                if (!excerpt.value) {
+                    const content = tinymce.get('articleContent').getContent({format: 'text'});
+                    const shortContent = content.substring(0, 200) + (content.length > 200 ? '...' : '');
+                    excerpt.value = shortContent;
+                    this.updateExcerptCounter();
+                }
+            }
+
+            newArticle() {
+                this.currentArticleId = null;
+                document.getElementById('articleFormData').reset();
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('articleId').value = '';
+                tinymce.get('articleContent').setContent('');
+                this.updateExcerptCounter();
+                
+                // Scroll to form
+                document.getElementById('articleForm').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            saveArticle(publish = false) {
+                const formData = this.getFormData();
+                
+                if (!formData.title || !formData.content) {
+                    alert('Judul dan konten artikel wajib diisi!');
+                    return;
+                }
+
+                const article = {
+                    id: this.currentArticleId || Date.now().toString(),
+                    title: formData.title,
+                    slug: formData.slug,
+                    category: formData.category,
+                    image: formData.image,
+                    content: formData.content,
+                    excerpt: formData.excerpt,
+                    tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
+                    featured: formData.featured,
+                    allowComments: formData.allowComments,
+                    status: publish ? 'published' : 'draft',
+                    createdAt: this.currentArticleId ? 
+                        this.articles.find(a => a.id === this.currentArticleId).createdAt : 
+                        new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (this.currentArticleId) {
+                    // Update existing article
+                    const index = this.articles.findIndex(a => a.id === this.currentArticleId);
+                    this.articles[index] = article;
+                } else {
+                    // Add new article
+                    this.articles.unshift(article);
+                }
+
+                this.saveToStorage();
+                this.loadArticles();
+                this.showNotification(
+                    `Artikel berhasil ${publish ? 'dipublikasikan' : 'disimpan sebagai draft'}!`,
+                    'success'
+                );
+
+                if (publish) {
+                    this.newArticle(); // Reset form after publishing
+                }
+            }
+
+            getFormData() {
+                return {
+                    title: document.getElementById('articleTitle').value,
+                    slug: document.getElementById('articleSlug').value,
+                    category: document.getElementById('articleCategory').value,
+                    image: document.getElementById('articleImage').value,
+                    content: tinymce.get('articleContent').getContent(),
+                    excerpt: document.getElementById('articleExcerpt').value,
+                    tags: document.getElementById('articleTags').value,
+                    featured: document.getElementById('articleFeatured').checked,
+                    allowComments: document.getElementById('articleComments').checked
+                };
+            }
+
+            editArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                this.currentArticleId = id;
+                
+                // Populate form
+                document.getElementById('articleId').value = article.id;
+                document.getElementById('articleTitle').value = article.title;
+                document.getElementById('articleSlug').value = article.slug;
+                document.getElementById('articleCategory').value = article.category;
+                document.getElementById('articleImage').value = article.image || '';
+                document.getElementById('articleExcerpt').value = article.excerpt || '';
+                document.getElementById('articleTags').value = article.tags?.join(', ') || '';
+                document.getElementById('articleFeatured').checked = article.featured || false;
+                document.getElementById('articleComments').checked = article.allowComments !== false;
+
+                // Set content in TinyMCE
+                tinymce.get('articleContent').setContent(article.content);
+
+                // Show image preview if exists
+                if (article.image) {
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('imagePreview').querySelector('img').src = article.image;
+                }
+
+                this.updateExcerptCounter();
+                
+                // Scroll to form
+                document.getElementById('articleForm').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            deleteArticle() {
+                if (!this.currentArticleId) return;
+
+                this.articles = this.articles.filter(a => a.id !== this.currentArticleId);
+                this.saveToStorage();
+                this.loadArticles();
+                this.hideModal('deleteModal');
+                this.showNotification('Artikel berhasil dihapus!', 'success');
+                this.currentArticleId = null;
+            }
+
+            confirmDelete(id, title) {
+                this.currentArticleId = id;
+                document.getElementById('deleteArticleTitle').textContent = title;
+                this.showModal('deleteModal');
+            }
+
+            previewArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                const previewContent = document.getElementById('articlePreviewContent');
+                previewContent.innerHTML = `
+                    <article>
+                        <h1>${article.title}</h1>
+                        ${article.image ? `<img src="${article.image}" alt="${article.title}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin: 1rem 0;">` : ''}
+                        <div class="article-meta" style="color: #6c757d; margin-bottom: 2rem;">
+                            <span>Kategori: ${this.getCategoryName(article.category)}</span> • 
+                            <span>Status: ${article.status === 'published' ? 'Published' : 'Draft'}</span> • 
+                            <span>${new Date(article.createdAt).toLocaleDateString('id-ID')}</span>
+                        </div>
+                        <div class="article-content">
+                            ${article.content || '<p>Konten artikel akan ditampilkan di sini...</p>'}
+                        </div>
+                        ${article.tags.length > 0 ? `
+                            <div class="article-tags" style="margin-top: 2rem;">
+                                <strong>Tag:</strong> ${article.tags.map(tag => `<span style="background: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 4px; margin: 0 0.25rem;">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </article>
+                `;
+
+                this.showModal('previewModal');
+            }
+
+            loadArticles() {
+                const tbody = document.getElementById('articlesList');
+                const loading = document.getElementById('loadingIndicator');
+                const noArticles = document.getElementById('noArticles');
+
+                loading.style.display = 'block';
+                noArticles.style.display = 'none';
+
+                setTimeout(() => {
+                    tbody.innerHTML = '';
+
+                    if (this.articles.length === 0) {
+                        loading.style.display = 'none';
+                        noArticles.style.display = 'block';
+                        return;
+                    }
+
+                    this.articles.forEach(article => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>
+                                ${article.image ? 
+                                    `<img src="${article.image}" alt="${article.title}" class="article-image">` : 
+                                    '<div style="width: 60px; height: 60px; background: #f8f9fa; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d;"><i class="fas fa-image"></i></div>'
+                                }
+                            </td>
+                            <td>
+                                <div class="article-title">${article.title}</div>
+                                <div class="article-excerpt">${article.excerpt || 'Tidak ada ringkasan...'}</div>
+                            </td>
+                            <td>${this.getCategoryName(article.category)}</td>
+                            <td>
+                                <span class="status-badge ${article.status === 'published' ? 'status-published' : 'status-draft'}">
+                                    ${article.status === 'published' ? 'Published' : 'Draft'}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="article-meta">${new Date(article.createdAt).toLocaleDateString('id-ID')}</div>
+                                <div class="article-meta">${new Date(article.updatedAt).toLocaleDateString('id-ID')}</div>
+                            </td>
+                            <td>
+                                <div class="article-actions">
+                                    <button class="btn-action btn-preview" onclick="articleManager.previewArticle('${article.id}')" title="Pratinjau">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn-action btn-edit" onclick="articleManager.editArticle('${article.id}')" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-action btn-delete" onclick="articleManager.confirmDelete('${article.id}', '${article.title.replace(/'/g, "\\'")}')" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+
+                    loading.style.display = 'none';
+                }, 500);
+            }
+
+            filterArticles(searchTerm) {
+                const rows = document.querySelectorAll('#articlesList tr');
+                rows.forEach(row => {
+                    const title = row.querySelector('.article-title').textContent.toLowerCase();
+                    const excerpt = row.querySelector('.article-excerpt').textContent.toLowerCase();
+                    const matches = title.includes(searchTerm.toLowerCase()) || excerpt.includes(searchTerm.toLowerCase());
+                    row.style.display = matches ? '' : 'none';
+                });
+            }
+
+            filterArticlesByCategory(category) {
+                const rows = document.querySelectorAll('#articlesList tr');
+                rows.forEach(row => {
+                    const categoryCell = row.cells[2].textContent.toLowerCase();
+                    const matches = !category || categoryCell === category;
+                    row.style.display = matches ? '' : 'none';
+                });
+            }
+
+            getCategoryName(category) {
+                const categories = {
+                    'inner-healing': 'Inner Healing',
+                    'trauma-release': 'Trauma Release',
+                    'healthy-boundaries': 'Healthy Boundaries',
+                    'body-intelligence': 'Body Intelligence',
+                    'holistic-wellness': 'Holistic Wellness',
+                    'self-permission': 'Self Permission'
+                };
+                return categories[category] || category;
+            }
+
+            clearImage() {
+                document.getElementById('articleImage').value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+            }
+
+            testImageUrl() {
+                const url = document.getElementById('articleImage').value.trim();
+                if (!url) {
+                    alert('Masukkan URL gambar terlebih dahulu!');
+                    return;
+                }
+
+                const testBtn = document.getElementById('testImage');
+                const originalHtml = testBtn.innerHTML;
+                testBtn.innerHTML = '<div class="spinner"></div> Testing...';
+                testBtn.disabled = true;
+
+                const img = new Image();
+                img.onload = () => {
+                    testBtn.innerHTML = '<i class="fas fa-check"></i> URL Valid';
+                    testBtn.style.background = 'var(--success)';
+                    setTimeout(() => {
+                        testBtn.innerHTML = originalHtml;
+                        testBtn.style.background = '';
+                        testBtn.disabled = false;
+                    }, 2000);
+                };
+                img.onerror = () => {
+                    testBtn.innerHTML = '<i class="fas fa-times"></i> URL Invalid';
+                    testBtn.style.background = 'var(--danger)';
+                    setTimeout(() => {
+                        testBtn.innerHTML = originalHtml;
+                        testBtn.style.background = '';
+                        testBtn.disabled = false;
+                    }, 2000);
+                    alert('URL gambar tidak valid atau tidak dapat diakses!');
+                };
+                img.src = url;
+            }
+
+            showModal(modalId) {
+                document.getElementById(modalId).classList.add('active');
+            }
+
+            hideModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            }
+
+            showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <div style="position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? 'var(--success)' : 'var(--primary-color)'}; color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: var(--shadow); z-index: 3000; animation: slideInRight 0.3s ease;">
+                        <i class="fas fa-${type === 'success' ? 'check' : 'info'}"></i> ${message}
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideOutRight 0.3s ease';
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                document.body.removeChild(notification);
+                            }
+                        }, 300);
+                    }
+                }, 3000);
+            }
+
+            saveToStorage() {
+                localStorage.setItem('coachInneArticles', JSON.stringify(this.articles));
+            }
+        }
+
+        // Initialize Article Manager
+        const articleManager = new ArticleManager();
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>

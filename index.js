@@ -1,66 +1,147 @@
 // index.js
 import express from 'express';
-import cors from 'cors';
+// import cors from 'cors';
 import supabase from './supabaseClient.js';
+import EJS from 'express-ejs-layouts'
+import fileUpload from 'express-fileupload'
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
+app.set('view engine', 'ejs')
+app.use(EJS)
+app.use(fileUpload())
+app.use(express.static("public"))
+//app.use(cors());
+//app.use(express.json());
+
+// halaman utama
+app.get('/', (req, res)=>{
+  try {
+    return res.render("home",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
+// halaman about
+app.get('/about', (req, res)=>{
+  try {
+    return res.render("about",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman about", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
+// halaman methodology
+app.get('/', (req, res)=>{
+  try {
+    return res.render("methodology",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman methodology", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
 
 // GET - Ambil semua produk
-app.get('/products', async (req, res) => {
+app.get('/articles', async (req, res) => {
   const { data, error } = await supabase
-    .from('products')
+    .from('articles')
     .select('*');
   
   if (error) {
-    return res.status(500).json({ error: error.message });
+    return res.render("error",{
+      layout: "layout",
+      data: "server error"
+    });
   }
-  res.status(200).json(data);
+  res.render("blog",{
+    layout: "layout",
+    data
+  });
 });
 
-// POST - Buat produk baru
-app.post('/products', async (req, res) => {
-  const { name, description, price } = req.body;
+// halaman tambah artikel
+app.get('/articles/new', (req, res)=>{
+  try {
+    return res.render("new-blog",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
+// POST - simpan artikel baru
+app.post('/articles', async (req, res) => {
+  const { title, description } = req.body;
   const { data, error } = await supabase
-    .from('products')
-    .insert([{ name, description, price }])
+    .from('articles')
+    .insert([{ title, description }])
     .select();
 
   if (error) {
-    return res.status(500).json({ error: error.message });
+    return res.render("error",{
+      layout: "layout",
+      data: "server error"
+    });
   }
-  res.status(201).json(data);
+  return res.redirect("/articles");
 });
 
 // PUT - Perbarui produk berdasarkan ID
-app.put('/products/:id', async (req, res) => {
+app.put('/articles/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, description, price } = req.body;
+  const { title, description } = req.body;
   const { data, error } = await supabase
-    .from('products')
-    .update({ name, description, price })
+    .from('articles')
+    .update({ title, description })
     .eq('id', id)
     .select();
 
   if (error) {
-    return res.status(500).json({ error: error.message });
+    return res.render("error",{
+      layout: "layout",
+      data: "server error"
+    });
   }
-  res.status(200).json(data);
+  res.redirect("/");
 });
 
 // DELETE - Hapus produk berdasarkan ID
-app.delete('/products/:id', async (req, res) => {
+app.delete('/articles/:id', async (req, res) => {
   const { id } = req.params;
   const { error } = await supabase
-    .from('products')
+    .from('articles')
     .delete()
     .eq('id', id);
 
   if (error) {
-    return res.status(500).json({ error: error.message });
+    return res.render("error",{
+      layout: "layout",
+      data: "server error"
+    });
   }
   res.status(200).json({ message: 'Product deleted successfully' });
 });
