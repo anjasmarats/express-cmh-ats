@@ -11,15 +11,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
 app.use(EJS)
 app.use(fileUpload())
-app.use(express.static("public"))
-//app.use(cors());
-//app.use(express.json());
+app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // GET - Ambil semua produk
 app.get('/', async (req, res) => {
@@ -107,6 +107,6 @@ app.delete('/articles/:id', async (req, res) => {
   res.status(200).json({ message: 'Product deleted successfully' });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
 });
