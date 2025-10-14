@@ -4,7 +4,7 @@ import express from 'express';
 import supabase from './supabaseClient.js';
 import EJS from 'express-ejs-layouts'
 import fileUpload from 'express-fileupload'
-import path from 'path';
+// import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,51 +16,6 @@ app.use(fileUpload())
 app.use(express.static("public"))
 //app.use(cors());
 //app.use(express.json());
-
-// halaman utama
-app.get('/', (req, res)=>{
-  try {
-    return res.render("home",{
-      layout: "layout"
-    })
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
-
-// halaman about
-app.get('/about', (req, res)=>{
-  try {
-    return res.render("about",{
-      layout: "layout"
-    })
-  } catch (error) {
-    console.error("error halaman about", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
-
-// halaman methodology
-app.get('/', (req, res)=>{
-  try {
-    return res.render("methodology",{
-      layout: "layout"
-    })
-  } catch (error) {
-    console.error("error halaman methodology", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
 
 // GET - Ambil semua produk
 app.get('/articles', async (req, res) => {
