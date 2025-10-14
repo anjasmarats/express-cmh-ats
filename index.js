@@ -34,6 +34,8 @@ app.get('/', async (req, res) => {
       data: "server error"
     });
   }
+
+  console.log("data halaman utama",data)
   res.render("blog/blog.ejs",{
     layout: "layout",
     data
