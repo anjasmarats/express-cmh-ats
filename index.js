@@ -6,8 +6,6 @@ import EJS from 'express-ejs-layouts'
 import fileUpload from 'express-fileupload'
 import path from 'path';
 
-/ const __dirname = path.dirname(__filename);
-
 const app = express();
 const port = process.env.PORT || 3000;
 
