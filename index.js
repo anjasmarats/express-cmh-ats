@@ -32,6 +32,13 @@ app.use(express.static(path.join(__dirname, 'assets')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const cekauth = (req,res) => {
+  if (!req.session.isAdmin) return redirect("/")
+    return res.render("new-blog",{
+      layout: "layout"
+    })
+}
+
 // GET - Ambil semua produk
 app.get('/', async (req, res) => {
   const { data, error } = await supabase
@@ -56,6 +63,7 @@ app.get('/', async (req, res) => {
 // halaman tambah artikel
 app.get('/articles/new', (req, res)=>{
   try {
+    cekauth(req,res)
     return res.render("new-blog",{
       layout: "layout"
     })
