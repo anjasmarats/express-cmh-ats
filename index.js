@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cekauth = (req,res) => {
-  if (!req.session.isAdmin) return redirect("/")
+  if (!req.session) return redirect("/")
 }
 
 // GET - Ambil semua produk
