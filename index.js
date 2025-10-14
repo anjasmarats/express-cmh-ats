@@ -28,6 +28,7 @@ app.get('/', async (req, res) => {
     .select('*');
   
   if (error) {
+    console.error("error halaman utama: ", error)
     return res.render("error.ejs",{
       layout: "layout",
       data: "server error"
