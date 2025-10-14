@@ -53,7 +53,8 @@ app.get('/', async (req, res) => {
   console.log("data halaman utama",data)
   res.render("blog/blog.ejs",{
     layout: "layout",
-    data
+    data,
+    isAdmin:req.session.isAdmin
   });
 });
 
