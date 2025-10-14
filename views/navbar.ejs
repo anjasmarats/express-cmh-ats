@@ -9,7 +9,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                <%- if(isAdmin) { %>
+                <%- if(isLoggedIn) { %>
                     <li class="nav-item"><a class="nav-link" href="/logout">Keluar</a></li>
                     <li class="nav-item"><a class="nav-link" href="/articles/new">Artikel baru</a></li>
                 <%- } else { %>
