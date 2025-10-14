@@ -50,13 +50,14 @@ app.get('/', async (req, res) => {
     });
   }
 
-  const isAdmin = req.session.isAdmin
+  const isLoggedIn = req.session
 
   console.log("data halaman utama",data)
   console.log("isAdmin ",req.user.isAdmin)
   res.render("blog/blog.ejs",{
     layout: "layout",
     data,
+    isLoggedIn
   });
 });
 
