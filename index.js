@@ -6,13 +6,13 @@ import EJS from 'express-ejs-layouts'
 import fileUpload from 'express-fileupload'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import session from 'express-session;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
-const session = require('express-session');
 
 app.use(session({
   secret: 'your-secret-key', // Required: used to sign the session ID cookie
