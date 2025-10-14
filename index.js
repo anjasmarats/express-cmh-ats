@@ -34,7 +34,7 @@ app.get('/', async (req, res) => {
       data: "server error"
     });
   }
-  res.render("blog",{
+  res.render("blog.ejs",{
     layout: "layout",
     data
   });
