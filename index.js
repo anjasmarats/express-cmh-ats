@@ -18,7 +18,7 @@ app.use(express.static("public"))
 //app.use(express.json());
 
 // GET - Ambil semua produk
-app.get('/articles', async (req, res) => {
+app.get('/', async (req, res) => {
   const { data, error } = await supabase
     .from('articles')
     .select('*');
