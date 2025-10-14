@@ -78,6 +78,7 @@ app.get('/articles/new', (req, res)=>{
 
 // POST - simpan artikel baru
 app.post('/articles', async (req, res) => {
+  cekauth();
   const { title, description } = req.body;
   const { data, error } = await supabase
     .from('articles')
@@ -95,6 +96,7 @@ app.post('/articles', async (req, res) => {
 
 // PUT - Perbarui produk berdasarkan ID
 app.put('/articles/:id', async (req, res) => {
+  cekauth();
   const { id } = req.params;
   const { title, description } = req.body;
   const { data, error } = await supabase
@@ -114,6 +116,7 @@ app.put('/articles/:id', async (req, res) => {
 
 // DELETE - Hapus produk berdasarkan ID
 app.delete('/articles/:id', async (req, res) => {
+  cekauth();
   const { id } = req.params;
   const { error } = await supabase
     .from('articles')
