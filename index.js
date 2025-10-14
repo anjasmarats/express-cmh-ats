@@ -24,7 +24,7 @@ app.get('/', async (req, res) => {
     .select('*');
   
   if (error) {
-    return res.render("error",{
+    return res.render("error.ejs",{
       layout: "layout",
       data: "server error"
     });
