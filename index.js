@@ -67,7 +67,7 @@ app.get('/account', (req, res)=>{
     if (req.session.user || req.session.isLoggedin) {
       return res.redirect("/")
     }
-    return res.render("login.ejs",{
+    return res.render("auth/login.ejs",{
       layout: "layout"
     })
   } catch (error) {
