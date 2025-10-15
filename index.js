@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cekauth = (req,res) => {
-  if (!req.session) return redirect("/")
+  if (!req.session.user) return redirect("/")
 }
 
 // GET - Ambil semua produk
@@ -60,6 +60,24 @@ app.get('/', async (req, res) => {
     isLoggedIn
   });
 });
+
+// halaman login
+app.get('/account', (req, res)=>{
+  try {
+    if (req.session.user || req.session.isLoggedin) {
+      return res.redirect("/")
+    }
+    return res.render("login.ejs",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
 
 // halaman tambah artikel
 app.get('/articles/new', (req, res)=>{
