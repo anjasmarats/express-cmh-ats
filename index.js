@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cekauth = (req,res) => {
-  if (!req.session.user) return redirect("/")
+  if (!req.session.user) return res.redirect("/")
 }
 
 // GET - Ambil semua produk
