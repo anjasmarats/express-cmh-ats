@@ -50,7 +50,7 @@ app.get('/', async (req, res) => {
     });
   }
 
-  const isLoggedIn = req.session.isLoggedIn ? true : false
+  const isLoggedIn = req.session.user
 
   console.log("data halaman utama",data)
   console.log("isLoggedIn ",isLoggedIn)
