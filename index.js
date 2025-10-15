@@ -141,7 +141,7 @@ app.get('/articles/new', (req, res)=>{
 app.get('/articles/new', (req, res)=>{
   try {
     cekauth(req,res)
-    return res.render("new-blog",{
+    return res.render("blog/new-blog.ejs",{
       layout: "layout"
     })
   } catch (error) {
