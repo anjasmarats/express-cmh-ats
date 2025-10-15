@@ -85,7 +85,9 @@ app.post('/account', async(req, res)=>{
     if (!req.body || !req.body.email || !req.body.password) {
       console.error("error login, data kosong, req.body",req.body)
       return res.render("error.ejs",{
-        layout: "layout"
+        layout: "layout",
+        code: 400,
+        message: "error"
       });
     }
     // Cari user berdasarkan email
