@@ -14,27 +14,8 @@
                 <!-- Error Animation & Icon -->
                 <div class="error-animation">
                     <span class="error-icon">🔍</span>
-                    <h1 class="error-code">404</h1>
-                    <h2 class="error-title">Halaman Tidak Ditemukan</h2>
-                </div>
-                
-                <!-- Error Message -->
-                <div class="error-message">
-                    <p>Sepertinya Anda telah tersesat dalam perjalanan healing Anda. Jangan khawatir, terkadang tersesat adalah bagian dari proses menemukan jalan yang benar.</p>
-                    <p>Mari kita bantu Anda kembali ke jalur keseimbangan dan penyembuhan.</p>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="error-actions">
-                    <a href="index.html" class="btn btn-primary btn-lg">
-                        <i class="fas fa-home me-2"></i>Kembali ke Beranda
-                    </a>
-                    <a href="contact.html" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-comments me-2"></i>Konsultasi Gratis
-                    </a>
-                    <button onclick="history.back()" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-arrow-left me-2"></i>Kembali ke Halaman Sebelumnya
-                    </button>
+                    <h1 class="error-code"><%= code %></h1>
+                    <h2 class="error-title"><%= message ></h2>
                 </div>
                 
                 <!-- Search Form -->
