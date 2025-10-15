@@ -80,7 +80,7 @@ app.get('/account', (req, res)=>{
 })
 
 // halaman login post
-app.post('/account', (req, res)=>{
+app.post('/account', async(req, res)=>{
   try {
     if (!req.body || !req.body.email || !req.body.password) {
       return res.render("error.ejs",{
