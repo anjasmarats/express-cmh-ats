@@ -125,7 +125,7 @@ app.post('/account', async(req, res)=>{
 app.get('/articles/new', (req, res)=>{
   try {
     cekauth(req,res)
-    return res.render("new-blog",{
+    return res.render("blog/new-blog.ejs",{
       layout: "layout"
     })
   } catch (error) {
@@ -138,7 +138,7 @@ app.get('/articles/new', (req, res)=>{
 })
 
 // halaman tambah artikel
-app.get('/articles/new', (req, res)=>{
+app.post('/articles/new', (req, res)=>{
   try {
     cekauth(req,res)
     return res.render("blog/new-blog.ejs",{
