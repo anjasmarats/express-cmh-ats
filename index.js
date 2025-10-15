@@ -64,7 +64,23 @@ app.get('/', async (req, res) => {
 // halaman tambah artikel
 app.get('/articles/new', (req, res)=>{
   try {
-    //cekauth(req,res)
+    cekauth(req,res)
+    return res.render("new-blog",{
+      layout: "layout"
+    })
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
+// halaman tambah artikel
+app.get('/articles/new', (req, res)=>{
+  try {
+    cekauth(req,res)
     return res.render("new-blog",{
       layout: "layout"
     })
@@ -79,7 +95,7 @@ app.get('/articles/new', (req, res)=>{
 
 // POST - simpan artikel baru
 app.post('/articles', async (req, res) => {
-  cekauth();
+  cekauth(req,res);
   const { title, description } = req.body;
   const { data, error } = await supabase
     .from('articles')
@@ -97,7 +113,7 @@ app.post('/articles', async (req, res) => {
 
 // PUT - Perbarui produk berdasarkan ID
 app.put('/articles/:id', async (req, res) => {
-  cekauth();
+  cekauth(req,res);
   const { id } = req.params;
   const { title, description } = req.body;
   const { data, error } = await supabase
@@ -117,7 +133,7 @@ app.put('/articles/:id', async (req, res) => {
 
 // DELETE - Hapus produk berdasarkan ID
 app.delete('/articles/:id', async (req, res) => {
-  cekauth();
+  cekauth(req,res);
   const { id } = req.params;
   const { error } = await supabase
     .from('articles')
