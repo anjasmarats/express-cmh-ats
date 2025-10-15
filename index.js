@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cekauth = (req,res) => {
-  console.log("cek auth req.session.user",!req.session.user)
+  console.log("cek auth req.session.user",req.session.user)
   if (!req.session.user) return res.redirect("/")
 }
 
