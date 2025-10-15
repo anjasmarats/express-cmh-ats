@@ -83,6 +83,7 @@ app.get('/account', (req, res)=>{
 app.post('/account', async(req, res)=>{
   try {
     if (!req.body || !req.body.email || !req.body.password) {
+      console.error("error login, data kosong, req.body",req.body)
       return res.render("error.ejs",{
         layout: "layout"
       });
