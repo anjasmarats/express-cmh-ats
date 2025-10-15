@@ -7,7 +7,6 @@ import fileUpload from 'express-fileupload'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import session from 'express-session';
-import bcrypt from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -93,19 +92,11 @@ app.post('/account', (req, res)=>{
       .from('users')
       .select('*')
       .eq('email', email)
+      .eq('password',password)
       .single();
 
     if (error || !user) {
-      console.error("error mengecek db", error,"\n\nuser\n\n",user)
-      return res.render("error.ejs",{
-        layout: "layout"
-      });
-    }
-
-    // Verifikasi password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      console.error("error password login")
+      console.error("error email/password salah", error,"\n\nuser\n\n",user)
       return res.render("error.ejs",{
         layout: "layout"
       });
