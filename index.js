@@ -94,8 +94,8 @@ app.post('/account', async(req, res)=>{
     const { data: user, error } = await supabase
       .from('users')
       .select('*')
-      .eq('email', email)
-      .eq('password',password)
+      .eq('email', req.body.email)
+      .eq('password',req.body.password)
       .single();
 
     if (error || !user) {
