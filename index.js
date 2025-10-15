@@ -7,6 +7,7 @@ import fileUpload from 'express-fileupload'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import session from 'express-session';
+import bcrypt from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,52 @@ app.get('/account', (req, res)=>{
     return res.render("auth/login.ejs",{
       layout: "layout"
     })
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
+// halaman login post
+app.post('/account', (req, res)=>{
+  try {
+    if (!req.body || !req.body.email || !req.body.password) {
+      return res.render("error.ejs",{
+        layout: "layout"
+      });
+    }
+    // Cari user berdasarkan email
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (error || !user) {
+      console.error("error mengecek db", error,"\n\nuser\n\n",user)
+      return res.render("error.ejs",{
+        layout: "layout"
+      });
+    }
+
+    // Verifikasi password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      console.error("error password login")
+      return res.render("error.ejs",{
+        layout: "layout"
+      });
+    }
+
+    req.session.user = {
+      email:req.body.email,
+      password:req.body.password
+    }
+
+    return res.redirect("/")
   } catch (error) {
     console.error("error halaman utama", error)
     return res.render("error",{
