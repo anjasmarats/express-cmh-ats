@@ -53,7 +53,7 @@ app.get('/', async (req, res) => {
   const isLoggedIn = req.session.isLoggedIn ? true : false
 
   console.log("data halaman utama",data)
-  console.log("isLoggedIn ",req.session.isLoggedIn)
+  console.log("isLoggedIn ",isLoggedIn)
   res.render("blog/blog.ejs",{
     layout: "layout",
     data,
