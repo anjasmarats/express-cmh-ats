@@ -5,14 +5,14 @@
         <div class="container">
             <div class="article-header">
                 <div class="article-category" id="articleCategory">Inner Healing</div>
-                <h1 class="article-title" id="articleTitle">Memahami Inner Child: Menyembuhkan Luka Masa Kecil yang Membentuk Hidup Dewasa</h1>
+                <h1 class="article-title" id="articleTitle"><%= article.title %></h1>
                 
                 <div class="article-meta">
                     <div class="meta-item">
                         <i class="far fa-calendar"></i>
                         <span id="articleDate">15 November 2023</span>
                     </div>
-                    <div class="meta-item">
+                    <!--<div class="meta-item">
                         <i class="far fa-clock"></i>
                         <span class="reading-time">
                             <span id="readingTime">8</span> menit membaca
@@ -21,13 +21,13 @@
                     <div class="meta-item">
                         <i class="far fa-eye"></i>
                         <span id="viewCount">1.2k</span> dilihat
-                    </div>
+                    </div>-->
                 </div>
             </div>
 
-            <div class="article-hero-image" id="articleHeroImage">
+            <!--<div class="article-hero-image" id="articleHeroImage">
                 <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Inner Child Healing">
-            </div>
+            </div>-->
         </div>
     </section>
 
@@ -36,10 +36,10 @@
         <div class="container">
             <div class="article-container">
                 <article class="article-content" id="articleContent">
-                    <!-- Article content will be loaded here -->
+                    <%= article.description %>
                 </article>
 
-                <!-- Article Actions -->
+                <!--<!-- Article Actions -->
                 <div class="article-actions">
                     <button class="action-btn like-btn" id="likeButton">
                         <i class="far fa-heart"></i>
@@ -67,7 +67,7 @@
                         <i class="far fa-bookmark"></i>
                         Simpan
                     </button>
-                </div>
+                </div>-->
             </div>
         </div>
     </section>
