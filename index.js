@@ -55,7 +55,7 @@ app.get('/', async (req, res) => {
 
   console.log("data halaman utama",data)
   console.log("isLoggedIn ",isLoggedIn)
-  res.render("blog/blog.ejs",{
+  return res.render("blog/blog.ejs",{
     layout: "layout",
     data,
     isLoggedIn
