@@ -227,7 +227,7 @@ app.post('/article/update/:id', async(req, res)=>{
       });
     }
 
-    return res.redirect("/article/content/"+id)
+    return res.redirect("/article/content/"+req.params.id)
   } catch (error) {
     console.error("error halaman utama", error)
     return res.render("error",{
