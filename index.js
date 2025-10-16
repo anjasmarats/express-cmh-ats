@@ -7,6 +7,7 @@ import fileUpload from 'express-fileupload'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import session from 'express-session';
+import { title } from 'node:process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -138,15 +139,37 @@ app.get('/articles/new', (req, res)=>{
 })
 
 // halaman tambah artikel
-app.post('/articles/new', (req, res)=>{
+app.post('/articles/new', async(req, res)=>{
   try {
     cekauth(req,res)
-    return res.render("blog/new-blog.ejs",{
-      layout: "layout"
-    })
+    if (!req.body || !req.body.title || !req.body.description) {
+      console.error("error login, data kosong, req.body",req.body)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 400,
+        message: "error"
+      });
+    }
+    const {data, error} = await supabase.from("articles")
+    .insert([{
+      title:req.body.title,
+      description:req.body.description
+    }]).select()
+
+    if (error) {
+      console.error("error posting artikel",error)
+      return res.render("error.ejs",{
+        layout:"layout",
+        code: 500,
+        message: "error server"
+      })
+    }
+
+    return res.redirect("/");
   } catch (error) {
     console.error("error halaman utama", error)
-    return res.render("error",{
+    return res.render("error.ejs",{
+      code: 500,
       layout:"layout",
       data: "server error"
     });
