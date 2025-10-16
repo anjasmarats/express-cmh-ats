@@ -162,7 +162,8 @@ app.post('/articles/new', async(req, res)=>{
       return res.render("error.ejs",{
         layout:"layout",
         code: 500,
-        message: "error server"
+        message: "error server",
+        isLoggedIn:req.session.user
       })
     }
 
