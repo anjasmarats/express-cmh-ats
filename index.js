@@ -77,7 +77,6 @@ app.get('/account', (req, res)=>{
     return res.render("error",{
       layout:"layout",
       data: "server error",
-      isLoggedIn:req.session.user
     });
   }
 })
@@ -128,13 +127,15 @@ app.get('/articles/new', (req, res)=>{
   try {
     cekauth(req,res)
     return res.render("blog/new-blog.ejs",{
-      layout: "layout"
+      layout: "layout",
+      isLoggedIn:req.session.user
     })
   } catch (error) {
     console.error("error halaman utama", error)
-    return res.render("error",{
+    return res.render("error.ejs",{
       layout:"layout",
-      data: "server error"
+      data: "server error",
+      code:500
     });
   }
 })
