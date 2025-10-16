@@ -283,7 +283,7 @@ app.post('/account', async(req, res)=>{
       });
     }
     // Cari user berdasarkan email
-    const { data: users, error } = await supabase
+    const { data: user, error } = await supabase
       .from('users')
       .select('*')
       .eq('email', req.body.email)
