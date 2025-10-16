@@ -251,7 +251,7 @@ app.get('/article/delete/:id', requireAuth, async(req,res)=>{
     const { error } = await supabase
       .from('todos')
       .delete()
-      .eq('id', id);
+      .eq('id', req.params.id);
 
     if (error){
       console.error("error hapus artikel",error)
