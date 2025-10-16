@@ -421,7 +421,17 @@
         }
 
         /* Reading Time Estimate */
-        .reading-time {
+        .edit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: blue;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hapus {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
