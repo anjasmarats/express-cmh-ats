@@ -124,10 +124,12 @@ app.get('/account', (req, res)=>{
   }
 })
 
-app.get('/article/content/:id', async(req, res)=>{
+app.get('/article/content/:id', requireAuth, async(req, res)=>{
   try {
     const id = req.params.id
 
+    const isLoggedIn = req.cookies && req.cookies.token;
+    
     const { data: article, error } = await supabase
       .from('articles')
       .select('*')
@@ -145,7 +147,8 @@ app.get('/article/content/:id', async(req, res)=>{
     
     return res.render("blog/detail-blog.ejs",{
       layout: "layout",
-      article
+      article,
+      isLoggedIn
     })
   } catch (error) {
     console.error("error detail blog", error)
