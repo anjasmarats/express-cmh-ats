@@ -124,6 +124,39 @@ app.get('/account', (req, res)=>{
   }
 })
 
+app.get('/article/content/:id', (req, res)=>{
+  try {
+    const id = req.params.id
+
+    const { data: article, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+      if (error || !article) {
+          console.error("error artikel tidak ditemukan", error,"\n\nartikel\n\n",article)
+          return res.render("error.ejs",{
+            layout: "layout",
+            code: 400,
+            message: "error"
+          });
+      }
+    
+    return res.render("blog/detail-blog.ejs",{
+      layout: "layout",
+      article
+    })
+  } catch (error) {
+    console.error("error detail blog", error)
+    return res.render("error.ejs",{
+      layout:"layout",
+      data: "server error",
+      code: 500
+    });
+  }
+})
+
 // halaman login post
 app.post('/account', async(req, res)=>{
   try {
