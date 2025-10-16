@@ -8,18 +8,18 @@
                 <h1 class="article-title" id="articleTitle"><%= article.title %></h1>
                 
                 <div class="article-meta">
-                    <div class="meta-item">
+                    <div class="meta-item text-light">
                         <i class="far fa-calendar"></i>
                         <span id="articleDate">15 November 2023</span>
                     </div>
                     <div class="meta-item">
                         <span class="edit">
-                            <a class="text-light text-decoration-none" href="/article/update/<%= article.id %>">Edit</a>
+                            <a class="fs-4 text-light text-decoration-none" href="/article/update/<%= article.id %>">Edit</a>
                         </span>
                     </div>
                     <div class="meta-item">
                         <span class="hapus">
-                            <a class="text-light text-decoratoon-none" href="/article/delete/<%= article.id %>">Hapus</a>
+                            <a class="fs-4 text-light text-decoratoon-none" href="/article/delete/<%= article.id %>">Hapus</a>
                         </span>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     <%= article.description %>
                 </article>
 
-                <!--<!-- Article Actions -->
+                <!-- Article Actions
                 <div class="article-actions">
                     <button class="action-btn like-btn" id="likeButton">
                         <i class="far fa-heart"></i>
