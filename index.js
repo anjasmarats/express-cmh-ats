@@ -151,10 +151,16 @@ app.post('/account', async(req, res)=>{
       });
     }
 
-    req.session.user = {
+    req.session.user = 
+
+      // Create JWT payload minimal
+  const token = signToken({
       email:req.body.email,
       password:req.body.password
-    }
+    });
+
+  // Set cookie; IMPORTANT: Set cookie before sending any other headers or body.
+  res.cookie('token', token, cookieOptions);
 
     return res.redirect("/")
   } catch (error) {
