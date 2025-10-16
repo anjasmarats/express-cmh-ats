@@ -8,6 +8,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -76,6 +78,7 @@ app.use(fileUpload())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // GET - Ambil semua produk
 app.get('/', async (req, res) => {
