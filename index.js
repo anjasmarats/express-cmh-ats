@@ -199,20 +199,24 @@ app.get('/article/update/:id', requireAuth, async(req, res)=>{
 // halaman login post
 app.post('/article/update/:id', async(req, res)=>{
   try {
-    if (!req.body || !req.body.title || !req.body.description) {
-      console.error("error update artikel, data kosong, req.body",req.body)
+    if (!req.body || !req.body.title || !req.body.description || !req.params.id) {
+      console.error("error update artikel, data kosong, req.body",req.body,"\nreq
+                    params.id",req.params.id)
       return res.render("error.ejs",{
         layout: "layout",
         code: 400,
         message: "error"
       });
     }
-    // Cari user berdasarkan email
+    // Cari artikel berdasarkan email
     const { data: article, error } = await supabase
       .from('articles')
-      .select('*')
-      .eq('email', req.body.email)
-      .eq('password',req.body.password)
+      .update({
+        title:req.body.title,
+        description:req.body.description
+      })
+      .eq('id', req.params.id)
+      .select()
       .single();
 
     if (error || !article) {
