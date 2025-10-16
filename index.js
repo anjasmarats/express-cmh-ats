@@ -160,6 +160,80 @@ app.get('/article/content/:id', requireAuth, async(req, res)=>{
   }
 })
 
+app.get('/article/update/:id', requireAuth, async(req, res)=>{
+  try {
+    const id = req.params.id
+
+    const isLoggedIn = req.cookies && req.cookies.token;
+    
+    const { data: article, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+      if (error || !article) {
+          console.error("error edit, artikel tidak ditemukan", error,"\n\nartikel\n\n",article)
+          return res.render("error.ejs",{
+            layout: "layout",
+            code: 400,
+            message: "error"
+          });
+      }
+    
+    return res.render("blog/update-blog.ejs",{
+      layout: "layout",
+      article,
+      isLoggedIn
+    })
+  } catch (error) {
+    console.error("error edit, detail blog", error)
+    return res.render("error.ejs",{
+      layout:"layout",
+      data: "server error",
+      code: 500
+    });
+  }
+})
+
+// halaman login post
+app.post('/article/update/:id', async(req, res)=>{
+  try {
+    if (!req.body || !req.body.title || !req.body.description) {
+      console.error("error update artikel, data kosong, req.body",req.body)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 400,
+        message: "error"
+      });
+    }
+    // Cari user berdasarkan email
+    const { data: article, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('email', req.body.email)
+      .eq('password',req.body.password)
+      .single();
+
+    if (error || !article) {
+      console.error("error update artikel", error,"\n\narticle\n\n",user)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 500,
+        message: "error server"
+      });
+    }
+
+    return res.redirect("/article/content/"+id)
+  } catch (error) {
+    console.error("error halaman utama", error)
+    return res.render("error",{
+      layout:"layout",
+      data: "server error"
+    });
+  }
+})
+
 // halaman login post
 app.post('/account', async(req, res)=>{
   try {
@@ -172,7 +246,7 @@ app.post('/account', async(req, res)=>{
       });
     }
     // Cari user berdasarkan email
-    const { data: user, error } = await supabase
+    const { data: users, error } = await supabase
       .from('users')
       .select('*')
       .eq('email', req.body.email)
