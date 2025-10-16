@@ -7,7 +7,7 @@ import fileUpload from 'express-fileupload'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
