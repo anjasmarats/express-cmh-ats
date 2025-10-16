@@ -261,6 +261,13 @@ app.delete('/articles/:id', requireAuth, async (req, res) => {
   res.status(200).json({ message: 'Product deleted successfully' });
 });
 
+// GET /api/logout
+app.get('/logout', (req, res) => {
+  // Clear cookie by setting expiry in past
+  res.clearCookie('token', cookieOptions);
+  return res.redirect("/");
+});
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${port}`);
 });
