@@ -200,8 +200,7 @@ app.get('/article/update/:id', requireAuth, async(req, res)=>{
 app.post('/article/update/:id', async(req, res)=>{
   try {
     if (!req.body || !req.body.title || !req.body.description || !req.params.id) {
-      console.error("error update artikel, data kosong, req.body",req.body,"\nreq
-                    params.id",req.params.id)
+      console.error("error update artikel, data kosong, req.body",req.body,"\nreq.params.id",req.params.id)
       return res.render("error.ejs",{
         layout: "layout",
         code: 400,
