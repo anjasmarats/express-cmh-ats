@@ -14,6 +14,8 @@ import bodyParser from 'body-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
+
 const app = express();
 const port = process.env.PORT || 5000;
 
