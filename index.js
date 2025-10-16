@@ -11,6 +11,17 @@ import jwt from 'jsonwebtoken';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// --- Configurable cookie options ---
+// Secure must be true in production (Vercel uses HTTPS).
+const cookieOptions = {
+  httpOnly: true,                      // inaccessible via JS (mitigates XSS)
+  secure: true, // send only over HTTPS in production
+  sameSite: 'lax',                     // allow top-level navigations (login->redirect flows)
+  maxAge: 1000 * 60 * 60 * 24 * 7,     // 7 days
+  path: '/',                           // cookie path
+  // domain: '.yourdomain.com'         // set if you're using subdomains; omit for automatic
+};
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 
 const app = express();
@@ -26,6 +37,38 @@ app.use(session({
     maxAge: 1000 * 60 * 30   // Optional: session duration (e.g., 30 minutes)
   }
 }));
+
+function signToken(payload, opts = {}) {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: opts.expiresIn || '7d' });
+}
+
+function verifyToken(token) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    return null;
+  }
+}
+
+// --- Middleware ---
+function requireAuth(req, res, next) {
+  const token = req.cookies && req.cookies.token;
+  if (!token) {
+    // No cookie -> not authenticated
+    return res.status(401).json({ ok: false, error: 'Not authenticated' });
+  }
+  const payload = verifyToken(token);
+  if (!payload) {
+    // invalid or expired token
+    // clear cookie to be safe
+    res.clearCookie('token', cookieOptions);
+    return res.status(401).json({ ok: false, error: 'Invalid or expired token' });
+  }
+  // attach user info to req for handlers
+  req.user = payload;
+  next();
+}
+
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
 app.use(EJS)
