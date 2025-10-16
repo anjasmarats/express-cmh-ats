@@ -85,16 +85,17 @@ app.get('/', async (req, res) => {
   const { data, error } = await supabase
     .from('articles')
     .select('*');
+
+  const isLoggedIn = req.cookies && req.cookies.token;
   
   if (error) {
     console.error("error halaman utama: ", error)
     return res.render("error.ejs",{
       layout: "layout",
-      data: "server error"
+      data: "server error",
+      isLoggedIn
     });
   }
-
-  const isLoggedIn = req.cookies && req.cookies.token;
 
   console.log("data halaman utama",data)
   console.log("isLoggedIn ",isLoggedIn)
