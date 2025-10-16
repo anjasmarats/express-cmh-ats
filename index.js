@@ -77,11 +77,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const cekauth = (req,res) => {
-  console.log("cek auth !req.session.user",!req.session.user,"\nreq.session.user",req.session.user)
-  if (!req.session.user) return res.redirect("/")
-}
-
 // GET - Ambil semua produk
 app.get('/', async (req, res) => {
   const { data, error } = await supabase
@@ -96,7 +91,7 @@ app.get('/', async (req, res) => {
     });
   }
 
-  const isLoggedIn = req.session.user
+  const isLoggedIn = req.cookies && req.cookies.token;
 
   console.log("data halaman utama",data)
   console.log("isLoggedIn ",isLoggedIn)
@@ -110,7 +105,8 @@ app.get('/', async (req, res) => {
 // halaman login
 app.get('/account', (req, res)=>{
   try {
-    if (req.session.user || req.session.isLoggedin) {
+    const token = req.cookies && req.cookies.token
+    if (token && verifyToken(token)) {
       return res.redirect("/")
     }
     return res.render("auth/login.ejs",{
@@ -151,8 +147,6 @@ app.post('/account', async(req, res)=>{
       });
     }
 
-    req.session.user = 
-
       // Create JWT payload minimal
   const token = signToken({
       email:req.body.email,
@@ -173,12 +167,12 @@ app.post('/account', async(req, res)=>{
 })
 
 // halaman tambah artikel
-app.get('/articles/new', (req, res)=>{
+app.get('/articles/new', requireAuth,(req, res)=>{
   try {
-    cekauth(req,res)
+    const isLoggedIn = req.cookies && req.cookies.token;
     return res.render("blog/new-blog.ejs",{
       layout: "layout",
-      isLoggedIn:req.session.user
+      isLoggedIn
     })
   } catch (error) {
     console.error("error halaman utama", error)
@@ -191,9 +185,8 @@ app.get('/articles/new', (req, res)=>{
 })
 
 // halaman tambah artikel
-app.post('/articles/new', async(req, res)=>{
+app.post('/articles/new', requireAuth, async(req, res)=>{
   try {
-    cekauth(req,res)
     if (!req.body || !req.body.title || !req.body.description) {
       console.error("error login, data kosong, req.body",req.body)
       return res.render("error.ejs",{
@@ -229,27 +222,8 @@ app.post('/articles/new', async(req, res)=>{
   }
 })
 
-// POST - simpan artikel baru
-app.post('/articles', async (req, res) => {
-  cekauth(req,res);
-  const { title, description } = req.body;
-  const { data, error } = await supabase
-    .from('articles')
-    .insert([{ title, description }])
-    .select();
-
-  if (error) {
-    return res.render("error",{
-      layout: "layout",
-      data: "server error"
-    });
-  }
-  return res.redirect("/articles");
-});
-
 // PUT - Perbarui produk berdasarkan ID
-app.put('/articles/:id', async (req, res) => {
-  cekauth(req,res);
+app.put('/articles/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const { title, description } = req.body;
   const { data, error } = await supabase
@@ -268,8 +242,7 @@ app.put('/articles/:id', async (req, res) => {
 });
 
 // DELETE - Hapus produk berdasarkan ID
-app.delete('/articles/:id', async (req, res) => {
-  cekauth(req,res);
+app.delete('/articles/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const { error } = await supabase
     .from('articles')
