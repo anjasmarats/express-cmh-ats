@@ -237,6 +237,40 @@ app.post('/article/update/:id', async(req, res)=>{
   }
 })
 
+app.get('/article/delete/:id', requireAuth, async(req,res)=>{
+  try{
+    if (!req.params.id){
+      console.error("error hapus artikel, req.params.id",req.params.id)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 400,
+        message:"error"
+      })
+    }
+
+    const { error } = await supabase
+      .from('todos')
+      .delete()
+      .eq('id', id);
+
+    if (error){
+      console.error("error hapus artikel",error)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 500,
+        message:"error server"
+      })
+    }
+  } catch(error){
+      console.error("error server hapus artikel",error)
+      return res.render("error.ejs",{
+        layout: "layout",
+        code: 500,
+        message:"error server"
+      })
+  }
+})
+
 // halaman login post
 app.post('/account', async(req, res)=>{
   try {
