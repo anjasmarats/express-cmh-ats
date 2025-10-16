@@ -58,6 +58,7 @@
                     <!-- Articles Grid -->
                     <div class="row g-4">
                         <!-- Article 1 -->
+                        <% data.forEach((d)=>{ %>
                         <div class="col-md-6">
                             <div class="article-card">
                                 <img src="assets/images/article1.jpg" alt="Healthy Boundaries" class="article-image">
@@ -78,6 +79,7 @@
                                 </div>
                             </div>
                         </div>
+                        <% }) %>
 
                     <!-- Pagination -->
                     <nav aria-label="Blog pagination" class="mt-5">
