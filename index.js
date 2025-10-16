@@ -76,7 +76,8 @@ app.get('/account', (req, res)=>{
     console.error("error halaman utama", error)
     return res.render("error",{
       layout:"layout",
-      data: "server error"
+      data: "server error",
+      isLoggedIn:req.session.user
     });
   }
 })
