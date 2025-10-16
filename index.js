@@ -249,16 +249,19 @@ app.get('/article/delete/:id', requireAuth, async(req,res)=>{
     }
 
     const { error } = await supabase
-      .from('todos')
+      .from('articles')
       .delete()
       .eq('id', req.params.id);
+
+    const isLoggedIn = req.cookies && req.cookies.token
 
     if (error){
       console.error("error hapus artikel",error)
       return res.render("error.ejs",{
         layout: "layout",
         code: 500,
-        message:"error server"
+        message:"error server",
+        isLoggedIn
       })
     }
   } catch(error){
