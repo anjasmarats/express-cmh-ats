@@ -95,6 +95,7 @@
         }
 
         .article-content {
+            text-align: justify;
             font-size: 1.1rem;
             line-height: 1.8;
             color: var(--text-dark);
