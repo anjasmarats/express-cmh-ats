@@ -87,6 +87,14 @@
           art.innerText = result
         })
 
+        const artDescDetail = document.getElementByid("articleContent")
+
+        artDescDetail.forEach((art)=>{
+          conts text = art.innerText
+          const result = formatText(text)
+          art.innerText = result
+        })
+
         // Fungsi untuk memproses dan memformat teks
         const formatText=(text) =>{
             // Membersihkan output container
