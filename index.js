@@ -277,6 +277,8 @@ app.get('/article/delete/:id', requireAuth, async(req,res)=>{
         isLoggedIn
       })
     }
+
+    return res.redirect("/")
   } catch(error){
       console.error("error server hapus artikel",error)
       return res.render("error.ejs",{
