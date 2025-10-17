@@ -12,6 +12,7 @@
                         <i class="far fa-calendar"></i>
                         <span id="articleDate">15 November 2023</span>
                     </div>
+                    <% if(isLoggedIn){ %>
                     <div class="meta-item">
                         <span class="edit">
                             <a class="fs-4 text-light text-decoration-none" href="/article/update/<%= article.id %>">Edit</a>
@@ -22,6 +23,7 @@
                             <a class="fs-4 text-light text-decoration-none" onclick="return confirm('Yakin ingin menghapus ini? Ini tidak akan bisa dipulihkan!')" href="/article/delete/<%= article.id %>">Hapus</a>
                         </span>
                     </div>
+                    <% } %>
                 </div>
             </div>
 
