@@ -208,12 +208,24 @@ app.post('/article/update/:id', async(req, res)=>{
         message: "error"
       });
     }
+
+    const tgl = new Date();
+
+    const opsi = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    const timeArt = tgl.toLocaleDateString('id-ID', opsi);
+    
     // Cari artikel berdasarkan email
     const { data: article, error } = await supabase
       .from('articles')
       .update({
         title:req.body.title,
-        description:req.body.description
+        description:req.body.description,
+        time:timeArt
       })
       .eq('id', req.params.id)
       .select()
@@ -349,10 +361,22 @@ app.post('/articles/new', requireAuth, async(req, res)=>{
         message: "error"
       });
     }
+
+    const tgl = new Date();
+
+    const opsi = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    const timeArt = tgl.toLocaleDateString('id-ID', opsi);
+
     const {data, error} = await supabase.from("articles")
     .insert([{
       title:req.body.title,
-      description:req.body.description
+      description:req.body.description,
+      time:timeArt
     }]).select()
 
     if (error) {
