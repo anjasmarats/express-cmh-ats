@@ -125,7 +125,7 @@ app.get('/account', (req, res)=>{
   }
 })
 
-app.get('/article/content/:id', requireAuth, async(req, res)=>{
+app.get('/article/content/:id', async(req, res)=>{
   try {
     const id = req.params.id
 
