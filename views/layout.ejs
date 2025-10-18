@@ -88,16 +88,17 @@
         })
 
         const artDescDetail = document.getElementById("articleContent")
+const inpDesc = document.getElementById("input-desc")
 
-        const inpDesc = document.getElementById("input-desc")
-
-        artDescDetail.addEventListener("change",(e)=>{
-          const value = e.target.value
-          inpDesc.value = value.replace(/(\n\s*)+/g, match => '\n'.repeat(match.split('\n').length - 1))
-                          .replace(/\s*(-{3,})\s*/g, '\n\n\n\n');
-                // Mengganti karakter '-' yang berjumlah lebih dari 2 dengan \n\n\n\n
-          console.log("value inputDesc",inputDesc.value)
-        })
+// Ganti event 'change' menjadi 'input'
+artDescDetail.addEventListener("input", (e) => {
+  const value = e.target.value
+  inpDesc.value = value.replace(/(\n\s*)+/g, match => '\n'.repeat(match.split('\n').length - 1))
+                      .replace(/\s*(-{3,})\s*/g, '\n\n\n\n');
+  
+  // Perbaiki variabel di console.log
+  console.log("value inpDesc", inpDesc.value)
+})
 
         // Fungsi untuk memproses dan memformat teks
         const formatText=(text) =>{
