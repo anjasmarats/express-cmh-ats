@@ -92,7 +92,8 @@
         const inpDesc = document.getElementById("input-desc")
 
         artDescDetail.addEventListener("change",(e)=>{
-          inpDesc.value = e.target.value.replace(/(\n\s*)+/g, match => '\n'.repeat(match.split('\n').length - 1))
+          const value = e.target.value
+          inpDesc.value = value.replace(/(\n\s*)+/g, match => '\n'.repeat(match.split('\n').length - 1))
                           .replace(/\s*(-{3,})\s*/g, '\n\n\n\n');
                 // Mengganti karakter '-' yang berjumlah lebih dari 2 dengan \n\n\n\n
           console.log("value inputDesc",inputDesc.value)
