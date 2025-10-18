@@ -89,10 +89,12 @@
 
         const artDescDetail = document.getElementByid("articleContent")
 
-        artDescDetail.forEach((art)=>{
-          conts text = art.innerText
-          const result = formatText(text)
-          art.innerText = result
+        const inpDesc = document.getElementById("input-desc")
+
+        artDescDetail.addEventListener("onchange",(v)=>{
+          inpDesc.value = v.replace(/(\n\s*)+/g, match => '\n'.repeat(match.split('\n').length - 1))
+                          .replace(/\s*(-{3,})\s*/g, '\n\n\n\n');
+                // Mengganti karakter '-' yang berjumlah lebih dari 2 dengan \n\n\n\n
         })
 
         // Fungsi untuk memproses dan memformat teks
