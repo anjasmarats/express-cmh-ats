@@ -73,3 +73,22 @@
             </div>
         </div>
     </section>
+
+<script>
+      const inputText = document.getElementById('inputText').value;
+            
+            // Memproses teks sesuai aturan yang diberikan
+            const formattedText = processText(inputText);
+            
+            // Menampilkan hasil di elemen result
+            document.getElementById('result').innerHTML = formattedText;
+      const processText=(text)=>{
+        // Mengganti setiap \n\n\n\n dengan 2 baris kosong + <hr> + 2 baris kosong
+            // \n{4} berarti tepat 4 karakter newline berturut-turut
+            text = text.replace(/\n{4}/g, '<br><br><hr><br><br>');
+            
+            // Mengganti setiap \n dengan <br> (baris baru)
+            // dan menambahkan 4 &nbsp; setelah setiap <br> jika ada karakter setelahnya
+            text = text.replace(/\n/g, '<br>');
+      }
+    </script>
