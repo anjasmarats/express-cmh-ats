@@ -41,6 +41,30 @@
                     <%= article.description %>
                 </article>
 
+                <div class="share-container">
+            <div class="share-icon facebook" title="Bagikan ke Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="share-icon twitter" title="Bagikan ke Twitter">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <div class="share-icon linkedin" title="Bagikan ke LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </div>
+            <div class="share-icon whatsapp" title="Bagikan ke WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="share-icon telegram" title="Bagikan ke Telegram">
+                <i class="fab fa-telegram-plane"></i>
+            </div>
+            <div class="share-icon copy" title="Salin Tautan">
+                <i class="fas fa-link"></i>
+            </div>
+            <div class="share-icon share-api" title="Bagikan dengan Share API">
+                <i class="fas fa-share-alt"></i>
+            </div>
+        </div>
+
                 <!-- Article Actions
                 <div class="article-actions">
                     <button class="action-btn like-btn" id="likeButton">
@@ -91,4 +115,112 @@
             // dan menambahkan 4 &nbsp; setelah setiap <br> jika ada karakter setelahnya
             text = text.replace(/\n/g, '<br>');
       }
+
+
+
+
+
+
+
+      document.addEventListener('DOMContentLoaded', function() {
+            const shareIcons = document.querySelectorAll('.share-icon');
+            const currentUrl = window.location.href;
+            const pageTitle = document.title;
+            
+            // Fungsi untuk membuka jendela berbagi
+            function openShareWindow(url) {
+                const width = 600;
+                const height = 400;
+                const left = (window.innerWidth - width) / 2;
+                const top = (window.innerHeight - height) / 2;
+                
+                window.open(url, 'share', `width=${width},height=${height},left=${left},top=${top}`);
+            }
+            
+            // Fungsi untuk menyalin teks ke clipboard
+            function copyToClipboard(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    // Menggunakan Clipboard API modern
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('Tautan berhasil disalin!');
+                    }).catch(err => {
+                        console.error('Gagal menyalin: ', err);
+                        fallbackCopyTextToClipboard(text);
+                    });
+                } else {
+                    // Fallback untuk browser lama
+                    fallbackCopyTextToClipboard(text);
+                }
+            }
+            
+            // Fallback untuk menyalin teks
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = 0;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    if (successful) {
+                        alert('Tautan berhasil disalin!');
+                    } else {
+                        alert('Gagal menyalin tautan');
+                    }
+                } catch (err) {
+                    console.error('Fallback: Gagal menyalin teks', err);
+                    alert('Gagal menyalin tautan');
+                }
+            }
+            
+            // Event listener untuk setiap ikon
+            shareIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const platform = this.classList[1];
+                    
+                    switch(platform) {
+                        case 'facebook':
+                            openShareWindow(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`);
+                            break;
+                            
+                        case 'twitter':
+                            openShareWindow(`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(pageTitle)}`);
+                            break;
+                            
+                        case 'linkedin':
+                            openShareWindow(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`);
+                            break;
+                            
+                        case 'whatsapp':
+                            openShareWindow(`https://wa.me/?text=${encodeURIComponent(pageTitle + ' ' + currentUrl)}`);
+                            break;
+                            
+                        case 'telegram':
+                            openShareWindow(`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(pageTitle)}`);
+                            break;
+                            
+                        case 'copy':
+                            copyToClipboard(currentUrl);
+                            break;
+                            
+                        case 'share-api':
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: pageTitle,
+                                    url: currentUrl
+                                })
+                                .then(() => console.log('Berhasil berbagi'))
+                                .catch(error => console.log('Error sharing:', error));
+                            } else {
+                                showNotification('Browser tidak mendukung Share API');
+                            }
+                            break;
+                    }
+                });
+            });
+        });
     </script>
