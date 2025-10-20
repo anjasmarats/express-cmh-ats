@@ -60,14 +60,14 @@
                     </ul>
                 </div>
                 
-                <!--<div class="col-lg-3">
+                <div class="col-lg-3">
                     <h5 class="footer-title">Kontak</h5>
                     <div class="contact-info">
                         <p>📧 coachinne579@gmail.com</p>
-                        <p>📱 <a class="text-light text-decoration-none" href="https://wa.me/62882005018688"><i class="fab fa-whatsapp me-2"></i> +62 882-0050-18688</a></p>
+                        <!--<p>📱 <a class="text-light text-decoration-none" href="https://wa.me/"><i class="fab fa-whatsapp me-2"></i></a></p>-->
                         <p>📍 Yogyakarta, Indonesia</p>
                     </div>
-                </div>-->
+                </div>
             </div>
             
             <div class="row mt-5">
@@ -77,65 +77,6 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        const artDesc = document.getElementsByClassName("article-excerpt")
-
-        artDesc.forEach((art)=>{
-          conts text = art.innerText
-          const result = formatText(text)
-          art.innerText = result
-        })
-
-        // Fungsi untuk memproses dan memformat teks
-        const formatText=(text) =>{
-            // Membersihkan output container
-            let result = '';
-            
-            // Memisahkan teks menjadi paragraf berdasarkan newline
-            let paragraphs = text.split('\n');
-            
-            // Memproses setiap paragraf
-            paragraphs.forEach(paragraph => {
-                if (paragraph.trim() === '') {
-                    // Jika paragraf kosong, tambahkan elemen dengan jarak saja
-                    const emptyParagraph = document.createElement('p');
-                    emptyParagraph.classList.add('output-paragraph');
-                    emptyParagraph.style.height = '1em'; // Jarak untuk paragraf kosong
-                    outputContainer.appendChild(emptyParagraph);
-                    return;
-                }
-                
-                // Membuat elemen paragraf baru
-                const pElement = document.createElement('p');
-                pElement.classList.add('output-paragraph');
-                
-                // Memproses format teks
-                let formattedText = paragraph;
-                
-                // Memproses format tebal dengan ukuran berbeda berdasarkan jumlah *
-                formattedText = formattedText.replace(/(\*+)(.*?)\1/g, (match, stars, content) => {
-                    const starCount = stars.length;
-                    // Menentukan class berdasarkan jumlah bintang
-                    const sizeClass = starCount > 1 ? `size-${Math.min(starCount, 5)}` : '';
-                    return `<span class="fw-bolder ${sizeClass}">${content}</span>`;
-                });
-                
-                // Memproses format miring
-                formattedText = formattedText.replace(/(_+)(.*?)\1/g, (match, underscores, content) => {
-                    return `<span class="fst-italic">${content}</span>`;
-                });
-                
-                // Memproses format coret
-                formattedText = formattedText.replace(/(~+)(.*?)\1/g, (match, tildes, content) => {
-                    return `<span class="text-decoration-line-through">${content}</span>`;
-                });
-
-                result+=formattedText
-            });
-            return result
-        }
-    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
