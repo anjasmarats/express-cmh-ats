@@ -9,6 +9,9 @@ import { fileURLToPath } from 'node:url';
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+injectSpeedInsights();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,9 +22,9 @@ const cookieOptions = {
   httpOnly: true,                      // inaccessible via JS (mitigates XSS)
   secure: true, // send only over HTTPS in production
   sameSite: 'lax',                     // allow top-level navigations (login->redirect flows)
-  maxAge: 1000 * 60 * 60 * 24 * 7,     // 7 days
+  maxAge: 1000 * 60 * 30,     // 30 minutes
   path: '/',                           // cookie path
-  // domain: '.yourdomain.com'         // set if you're using subdomains; omit for automatic
+  domain: 'blog.jiwasehat.com'         // set if you're using subdomains; omit for automatic
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
