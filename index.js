@@ -118,12 +118,22 @@ app.use(cookieParser());
 
 // GET - Ambil semua produk
 app.get('/', async (req, res) => {
+  const cachedData = myCache.get("articles");
+  
+  const isLoggedIn = req.cookies && req.cookies.token;
+  
+  if (cachedData) {
+    return res.render("blog/blog.ejs",{
+      layout: "layout",
+      data: cachedData,
+      isLoggedIn
+    });
+  }
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*');
 
-  const isLoggedIn = req.cookies && req.cookies.token;
-  
   if (error) {
     console.error("error halaman utama: ", error)
     return res.render("error.ejs",{
@@ -132,6 +142,8 @@ app.get('/', async (req, res) => {
       isLoggedIn
     });
   }
+
+  myCache.set("articles",data);
 
   console.log("data halaman utama",data)
   console.log("isLoggedIn ",isLoggedIn)
@@ -166,6 +178,16 @@ app.get('/article/content/:id', async(req, res)=>{
     const id = req.params.id
 
     const isLoggedIn = req.cookies && req.cookies.token;
+
+    const cachedData = myCache.get(`article_${id}`);
+
+    if (cachedData) {
+      return res.render("blog/detail-blog.ejs",{
+        layout: "layout",
+        article: cachedData,
+        isLoggedIn
+      });
+    }
     
     const { data: article, error } = await supabase
       .from('articles')
@@ -181,7 +203,7 @@ app.get('/article/content/:id', async(req, res)=>{
             message: "error"
           });
       }
-    
+    myCache.set(`article_${id}`,article);
     return res.render("blog/detail-blog.ejs",{
       layout: "layout",
       article,
@@ -202,6 +224,16 @@ app.get('/article/update/:id', requireAuth, async(req, res)=>{
     const id = req.params.id
 
     const isLoggedIn = req.cookies && req.cookies.token;
+
+    const cachedData = myCache.get(`article_${id}`);
+
+    if (cachedData) {
+      return res.render("blog/update-blog.ejs",{
+        layout: "layout",
+        article: cachedData,
+        isLoggedIn
+      });
+    }
     
     const { data: article, error } = await supabase
       .from('articles')
@@ -217,6 +249,7 @@ app.get('/article/update/:id', requireAuth, async(req, res)=>{
             message: "error"
           });
       }
+    myCache.set(`article_${id}`,article);
     
     return res.render("blog/update-blog.ejs",{
       layout: "layout",
@@ -437,423 +470,6 @@ app.post('/articles/new', requireAuth, async(req, res)=>{
     });
   }
 })
-
-// GET /api/logout
-app.get('/logout', (req, res) => {
-  // Clear cookie by setting expiry in past
-  res.clearCookie('token', cookieOptions);
-  return res.redirect("/");
-});
-
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${port}`);
-});
-  resave: false,             // Recommended: avoid saving unmodified sessions
-  saveUninitialized: false,  // Recommended: avoid saving empty sessions
-  cookie: { 
-    secure: false,           // Set to true if using HTTPS
-    httpOnly: true,          // Recommended: prevents client-side JS access
-    maxAge: 1000 * 60 * 30   // Optional: session duration (e.g., 30 minutes)
-  }
-}));
-
-function signToken(payload, opts = {}) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: opts.expiresIn || '7d' });
-}
-
-function verifyToken(token) {
-  try {
-    return jwt.verify(token, JWT_SECRET);
-  } catch (err) {
-    return null;
-  }
-}
-
-// --- Middleware ---
-function requireAuth(req, res, next) {
-  const token = req.cookies && req.cookies.token;
-  if (!token) {
-    // No cookie -> not authenticated
-    return res.status(401).json({ ok: false, error: 'Not authenticated' });
-  }
-  const payload = verifyToken(token);
-  if (!payload) {
-    // invalid or expired token
-    // clear cookie to be safe
-    res.clearCookie('token', cookieOptions);
-    return res.status(401).json({ ok: false, error: 'Invalid or expired token' });
-  }
-  // attach user info to req for handlers
-  req.user = payload;
-  next();
-}
-
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'));
-app.use(EJS)
-app.use(fileUpload())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// GET - Ambil semua produk
-app.get('/', async (req, res) => {
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*');
-
-  const isLoggedIn = req.cookies && req.cookies.token;
-  
-  if (error) {
-    console.error("error halaman utama: ", error)
-    return res.render("error.ejs",{
-      layout: "layout",
-      data: "server error",
-      isLoggedIn
-    });
-  }
-
-  console.log("data halaman utama",data)
-  console.log("isLoggedIn ",isLoggedIn)
-  return res.render("blog/blog.ejs",{
-    layout: "layout",
-    data,
-    isLoggedIn
-  });
-});
-
-// halaman login
-app.get('/account', (req, res)=>{
-  try {
-    const token = req.cookies && req.cookies.token
-    if (token && verifyToken(token)) {
-      return res.redirect("/")
-    }
-    return res.render("auth/login.ejs",{
-      layout: "layout"
-    })
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error",
-    });
-  }
-})
-
-app.get('/article/content/:id', async(req, res)=>{
-  try {
-    const id = req.params.id
-
-    const isLoggedIn = req.cookies && req.cookies.token;
-    
-    const { data: article, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-      if (error || !article) {
-          console.error("error artikel tidak ditemukan", error,"\n\nartikel\n\n",article)
-          return res.render("error.ejs",{
-            layout: "layout",
-            code: 400,
-            message: "error"
-          });
-      }
-    
-    return res.render("blog/detail-blog.ejs",{
-      layout: "layout",
-      article,
-      isLoggedIn
-    })
-  } catch (error) {
-    console.error("error detail blog", error)
-    return res.render("error.ejs",{
-      layout:"layout",
-      data: "server error",
-      code: 500
-    });
-  }
-})
-
-app.get('/article/update/:id', requireAuth, async(req, res)=>{
-  try {
-    const id = req.params.id
-
-    const isLoggedIn = req.cookies && req.cookies.token;
-    
-    const { data: article, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-      if (error || !article) {
-          console.error("error edit, artikel tidak ditemukan", error,"\n\nartikel\n\n",article)
-          return res.render("error.ejs",{
-            layout: "layout",
-            code: 400,
-            message: "error"
-          });
-      }
-    
-    return res.render("blog/update-blog.ejs",{
-      layout: "layout",
-      article,
-      isLoggedIn
-    })
-  } catch (error) {
-    console.error("error edit, detail blog", error)
-    return res.render("error.ejs",{
-      layout:"layout",
-      data: "server error",
-      code: 500
-    });
-  }
-})
-
-// halaman login post
-app.post('/article/update/:id', async(req, res)=>{
-  try {
-    if (!req.body || !req.body.title || !req.body.description || !req.params.id) {
-      console.error("error update artikel, data kosong, req.body",req.body,"\nreq.params.id",req.params.id)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 400,
-        message: "error"
-      });
-    }
-
-    const tgl = new Date();
-
-    const opsi = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    };
-    const timeArt = tgl.toLocaleDateString('id-ID', opsi);
-    
-    // Cari artikel berdasarkan email
-    const { data: article, error } = await supabase
-      .from('articles')
-      .update({
-        title:req.body.title,
-        description:req.body.description,
-        time:timeArt
-      })
-      .eq('id', req.params.id)
-      .select()
-      .single();
-
-    if (error || !article) {
-      console.error("error update artikel", error,"\n\narticle\n\n",user)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 500,
-        message: "error server"
-      });
-    }
-
-    return res.redirect("/article/content/"+req.params.id)
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
-
-app.get('/article/delete/:id', requireAuth, async(req,res)=>{
-  try{
-    if (!req.params.id){
-      console.error("error hapus artikel, req.params.id",req.params.id)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 400,
-        message:"error"
-      })
-    }
-
-    const { error } = await supabase
-      .from('articles')
-      .delete()
-      .eq('id', req.params.id);
-
-    const isLoggedIn = req.cookies && req.cookies.token
-
-    if (error){
-      console.error("error hapus artikel",error)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 500,
-        message:"error server",
-        isLoggedIn
-      })
-    }
-
-    return res.redirect("/")
-  } catch(error){
-      console.error("error server hapus artikel",error)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 500,
-        message:"error server"
-      })
-  }
-})
-
-// halaman login post
-app.post('/account', async(req, res)=>{
-  try {
-    if (!req.body || !req.body.email || !req.body.password) {
-      console.error("error login, data kosong, req.body",req.body)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 400,
-        message: "error"
-      });
-    }
-    // Cari user berdasarkan email
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', req.body.email)
-      .eq('password',req.body.password)
-      .single();
-
-    if (error || !user) {
-      console.error("error email/password salah", error,"\n\nuser\n\n",user)
-      return res.render("error.ejs",{
-        layout: "layout"
-      });
-    }
-
-      // Create JWT payload minimal
-  const token = signToken({
-      email:req.body.email,
-      password:req.body.password
-    });
-
-  // Set cookie; IMPORTANT: Set cookie before sending any other headers or body.
-  res.cookie('token', token, cookieOptions);
-
-    return res.redirect("/")
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error",{
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
-
-// halaman tambah artikel
-app.get('/articles/new', requireAuth,(req, res)=>{
-  try {
-    const isLoggedIn = req.cookies && req.cookies.token;
-    return res.render("blog/new-blog.ejs",{
-      layout: "layout",
-      isLoggedIn
-    })
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error.ejs",{
-      layout:"layout",
-      data: "server error",
-      code:500
-    });
-  }
-})
-
-// halaman tambah artikel
-app.post('/articles/new', requireAuth, async(req, res)=>{
-  try {
-    if (!req.body || !req.body.title || !req.body.description) {
-      console.error("error login, data kosong, req.body",req.body)
-      return res.render("error.ejs",{
-        layout: "layout",
-        code: 400,
-        message: "error"
-      });
-    }
-
-    const tgl = new Date();
-
-    const opsi = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    };
-    const timeArt = tgl.toLocaleDateString('id-ID', opsi);
-
-    const {data, error} = await supabase.from("articles")
-    .insert([{
-      title:req.body.title,
-      description:req.body.description,
-      time:timeArt
-    }]).select()
-
-    if (error) {
-      console.error("error posting artikel",error)
-      return res.render("error.ejs",{
-        layout:"layout",
-        code: 500,
-        message: "error server",
-        isLoggedIn:req.session.user
-      })
-    }
-
-    return res.redirect("/");
-  } catch (error) {
-    console.error("error halaman utama", error)
-    return res.render("error.ejs",{
-      code: 500,
-      layout:"layout",
-      data: "server error"
-    });
-  }
-})
-
-// PUT - Perbarui produk berdasarkan ID
-app.put('/articles/:id', requireAuth, async (req, res) => {
-  const { id } = req.params;
-  const { title, description } = req.body;
-  const { data, error } = await supabase
-    .from('articles')
-    .update({ title, description })
-    .eq('id', id)
-    .select();
-
-  if (error) {
-    return res.render("error",{
-      layout: "layout",
-      data: "server error"
-    });
-  }
-  res.redirect("/");
-});
-
-// DELETE - Hapus produk berdasarkan ID
-app.delete('/articles/:id', requireAuth, async (req, res) => {
-  const { id } = req.params;
-  const { error } = await supabase
-    .from('articles')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    return res.render("error",{
-      layout: "layout",
-      data: "server error"
-    });
-  }
-  res.status(200).json({ message: 'Product deleted successfully' });
-});
 
 // GET /api/logout
 app.get('/logout', (req, res) => {
