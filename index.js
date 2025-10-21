@@ -22,33 +22,6 @@ const __dirname = path.dirname(__filename);
 // checkperiod: Interval untuk memeriksa dan menghapus item yang kadaluarsa (dalam detik)
 const myCache = new NodeCache({ stdTTL: 900, checkperiod: 120 });
 
-// Middleware untuk memverifikasi cache
-const verifyCache = (req, res, next) => {
-  try {
-    const { id } = req.params;
-    
-    // Membuat key cache yang unik berdasarkan ID dan endpoint
-    const cacheKey = id;
-    
-    // Periksa apakah data ada di cache
-    const cachedData = myCache.get(cacheKey);
-    if (cachedData) {
-      console.log('📨 Data dilayani dari cache');
-      req.cachedData = cachedData
-      next();
-    } else {
-      // Jika tidak ada di cache, lanjutkan ke handler
-      console.log('⚡ Cache miss, mengambil dari database');
-      req.cacheKey = cacheKey; // Teruskan key cache ke route handler
-      next();
-    }
-  } catch (err) {
-    console.error('Error dalam middleware cache:', err);
-    // Jika terjadi error di middleware, lanjutkan tanpa cache
-    return next();
-  }
-};
-
 // --- Configurable cookie options ---
 // Secure must be true in production (Vercel uses HTTPS).
 const cookieOptions = {
