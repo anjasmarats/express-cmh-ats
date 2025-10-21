@@ -24,6 +24,7 @@
     "express-session":"^1.18.2",
     "jsonwebtoken":"^9.0.2",
     "cookie-parser":"^1.4.7",
-    "@vercel/speed-insights":"^1.2.0"
+    "@vercel/speed-insights":"^1.2.0",
+    "node-cache":"^5.1.2"
   }
 }
